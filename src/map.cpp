@@ -10,6 +10,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <math.h>
+#include <algorithm>
 
 #include <OpenImageIO/imageio.h>
 #include <OpenImageIO/imagebuf.h>
@@ -55,6 +56,8 @@ MapSettings::MapSettings()
 	zoom_ = 2.0;
 
 	source_ = MapSettings::SourceNull;
+
+	opacity_ = 100;
 }
 
 
@@ -69,6 +72,21 @@ const MapSettings::Source& MapSettings::source(void) const {
 
 void MapSettings::setSource(const MapSettings::Source &source) {
 	source_ = source;
+}
+
+
+const int& MapSettings::opacity(void) const {
+	return opacity_;
+}
+
+
+void MapSettings::setOpacity(const int &opacity) {
+	if (opacity < 0)
+		opacity_ = 0;
+	else if (opacity > 100)
+		opacity_ = 100;
+	else
+		opacity_ = opacity;
 }
 
 
@@ -1072,6 +1090,28 @@ OIIO::ImageBuf * Map::render(const TelemetryData &data, bool &is_update) {
 			}
 			else 
 				icon(*fg_buf_, *icon_position_buf_, x + offsetX + (posX * modifier), y + offsetY + (posY * modifier), OIIO::ROI(x, x + width, y, y + height));
+		}
+
+		// Apply map opacity (percent, 0-100) to the rendered map area
+		{
+			const int opacity = settings().opacity();
+			if (opacity < 100) {
+				const OIIO::ImageSpec &fgspec = fg_buf_->spec();
+				if (fgspec.nchannels == 4 && fgspec.format.basetype == OIIO::TypeDesc::BASETYPE::UINT8) {
+					const int fg_width = fg_buf_->spec().width;
+					unsigned char *base = (unsigned char *) fg_buf_->localpixels();
+					const int x0 = std::max(0, x);
+					const int y0 = std::max(0, y);
+					const int x1 = std::min(fgspec.width, x + width);
+					const int y1 = std::min(fgspec.height, y + height);
+					for (int iy = y0; iy < y1; ++iy) {
+						for (int ix = x0; ix < x1; ++ix) {
+							unsigned char *p = base + ((iy * fg_width + ix) * 4);
+							p[3] = static_cast<unsigned char>((p[3] * opacity) / 100);
+						}
+					}
+				}
+			}
 		}
 	}
 

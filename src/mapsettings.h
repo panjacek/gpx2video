@@ -38,6 +38,9 @@ public:
 	const Source& source(void) const;
 	void setSource(const Source &source);
 
+	const int& opacity(void) const;
+	void setOpacity(const int &opacity);
+
 	static const std::string getFriendlyName(const Source &source);
 	static const std::string getCopyright(const Source &source);
 	static int getMinScale(const Source &source);
@@ -46,6 +49,7 @@ public:
 
 private:
 	enum Source source_;
+	int opacity_;
 };
 
 #endif

@@ -264,6 +264,7 @@ bool Renderer::loadMap(layout::Map *m) {
 	mapSettings.setSource((MapSettings::Source) mapsource);
 	mapSettings.setScale(m->scale());
 	mapSettings.setZoom(m->zoom());
+	mapSettings.setOpacity(m->opacity());
 	mapSettings.setView((MapSettings::View) view);
 	mapSettings.setPathThick((double) m->pathThick());
 	mapSettings.setPathBorder((double) m->pathBorder());

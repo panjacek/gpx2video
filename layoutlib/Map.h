@@ -247,6 +247,13 @@ namespace layout
     String  &backgroundColor() { return _bgcolor; }
 
 	///
+	/// Get opacity
+	///
+	/// @return the opacity element
+	///
+	Unsigned  &opacity() { return _opacity; }
+
+	///
 	/// Get round corner 
 	/// 
 	/// @return the round corner attribute
@@ -368,6 +375,7 @@ namespace layout
 	String       _bordercolor;
 	Unsigned     _round_corner;
 	String       _bgcolor;
+	Unsigned     _opacity;
 
 	Unsigned     _path_smooth;
 	Decimal      _path_thick;

@@ -82,7 +82,8 @@ namespace layout
 	
 	_with_icon_end(this, "with-icon-end", Node::ELEMENT, false),
 	_with_icon_start(this, "with-icon-start", Node::ELEMENT, false),
-	_with_icon_position(this, "with-icon-position", Node::ELEMENT, false)
+	_with_icon_position(this, "with-icon-position", Node::ELEMENT, false),
+	_opacity(this, "opacity", Node::ELEMENT, false)
   {
     getInterfaces().push_back(&_source);
 	getInterfaces().push_back(&_display);
@@ -112,6 +113,7 @@ namespace layout
     getInterfaces().push_back(&_bordercolor);
     getInterfaces().push_back(&_round_corner);
     getInterfaces().push_back(&_bgcolor);
+    getInterfaces().push_back(&_opacity);
 
     getInterfaces().push_back(&_path_smooth);
     getInterfaces().push_back(&_path_thick);
@@ -150,6 +152,7 @@ namespace layout
 
 	_scale.setValue("12");
 	_zoom.setValue("1.0");
+	_opacity.setValue("100");
 
 	_path_smooth.setValue("1");
 	_path_thick.setValue("3.0");
